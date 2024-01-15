@@ -4,7 +4,10 @@
   <title>Yapay Zeka Sohbeti</title>
 </head>
 <body>
-  <h1>Yapay Zeka Sohbeti</h1>
+  <div id="chat">
+    <input id="user-input" type="text" />
+    <button id="send-button">Gönder</button>
+  </div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/google-generative-ai@2.0.0/dist/index.min.js"></script>
@@ -81,8 +84,8 @@
       // Yapay zekanın cevabını al
       const aiResponse = convo.last.text;
 
-      // Cevabı göster
-      $("#ai-response").text(aiResponse);
+      // Sohbet kutusunda yanıtı göster
+      $("#chat").append("<p id='ai-response'>" + aiResponse + "</p>");
     });
   </script>
 </body>
