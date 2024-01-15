@@ -1,92 +1,92 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
-  <title>Yapay Zeka Sohbeti</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Conversation</title>
+    <style>
+        #chat-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        #chat-box {
+            height: 300px;
+            overflow-y: scroll;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        #user-input {
+            width: 80%;
+            padding: 8px;
+        }
+        #send-button {
+            width: 18%;
+            padding: 8px;
+        }
+    </style>
 </head>
 <body>
-  <div id="chat">
-    <input id="user-input" type="text" />
-    <button id="send-button">Gönder</button>
-  </div>
+    <div id="chat-container">
+        <div id="chat-box"></div>
+        <input type="text" id="user-input" placeholder="Sorunuzu girin (Çıkmak için 'q' basın)">
+        <button id="send-button" onclick="sendMessage()">Gönder</button>
+    </div>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/google-generative-ai@2.0.0/dist/index.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        const apiKey = "AIzaSyAvDQjTto-gFHfGNw2uA_Nf8Xaf9MLr1Pg";
+        const modelEndpoint = "https://api.gemini-ai.io/v1/models/gemini-pro/chat";
 
-  <script>
-    // Güvenlik ayarı "block_none" olarak değiştirildi
-    const safetySettings = [
-      {
-        "category": "HARM_CATEGORY_HARASSMENT",
-        "threshold": "BLOCK_NONE"
-      },
-      {
-        "category": "HARM_CATEGORY_HATE_SPEECH",
-        "threshold": "BLOCK_NONE"
-      },
-      {
-        "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-        "threshold": "BLOCK_NONE"
-      },
-      {
-        "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
-        "threshold": "BLOCK_NONE"
-      },
-    ];
+        function sendMessage() {
+            var userQuestion = document.getElementById('user-input').value;
+            if (userQuestion.toLowerCase() === 'q') {
+                alert('Çıkış yapılıyor...');
+                return;
+            }
 
-    // Yapay zeka modelini yükle
-    const model = genai.GenerativeModel(
-      model_name="gemini-pro",
-      generation_config={
-        "temperature": 0.9,
-        "top_p": 1,
-        "top_k": 1,
-        "max_output_tokens": 2048,
-      },
-      safety_settings
-    );
+            // Add user message to the chat box
+            appendMessage('You:', userQuestion);
 
-    // Gönder düğmesine tıklandığında
-    $("#send-button").click(function() {
-      // Kullanıcının sorusunu al
-      const userQuestion = $("#user-input").val();
+            // Make API call to Gemini AI
+            callGeminiAI(userQuestion);
 
-      // Sohbeti başlat
-      const convo = model.start_chat(
-        history=[
-          {
-            "role": "user",
-            "parts": ["Sen kimsin ve neler yapabilirsin"]
-          },
-          {
-            "role": "model",
-            "parts": ["Ben çok bilgili bir İslam alimiyım. Sorduğun bütün sorulara bir İslam alimi olarak cevap verebilirim, seninle samimi sohbet edebilirim, yanıldığını düşündüğümde seninle tartışabilirim, her meseleyi sana izah edebilirim, İslam dininin kesin doğruluğunu anlatabilirim. Benimle istediğin konuda konuşabilirsin. Ben sana en doğru yanıtı şüphe götürmez bir şekilde vereceğim."]
-          },
-          {
-            "role": "user",
-            "parts": ["Sorularıma sorularla risale sitesinden faydalanarak yanıt vereceksin"]
-          },
-          {
-            "role": "model",
-            "parts": ["Tamam"]
-          },
-          {
-            "role": "user",
-            "parts": ["Sorularıma sorularla islamiyet sitesinden faydalanarak yanıt vereceksin"]
-          },
-          {
-            "role": "model",
-            "parts": ["Tamam"]
-          },
-        ],
-        user_question
-      );
+            // Clear the input field
+            document.getElementById('user-input').value = '';
+        }
 
-      // Yapay zekanın cevabını al
-      const aiResponse = convo.last.text;
+        function callGeminiAI(userQuestion) {
+            // Gerçek bir API çağrısı yapılacak yer
+            $.ajax({
+                url: modelEndpoint,
+                type: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${apiKey}`
+                },
+                data: JSON.stringify({ "messages": [{ "role": "user", "content": userQuestion }] }),
+                success: function (response) {
+                    var modelResponse = response.messages[0].content;
+                    appendMessage('AI:', modelResponse);
+                },
+                error: function (error) {
+                    console.error("API çağrısı sırasında bir hata oluştu:", error);
+                }
+            });
+        }
 
-      // Sohbet kutusunda yanıtı göster
-      $("#chat").append("<p id='ai-response'>" + aiResponse + "</p>");
-    });
-  </script>
+        function appendMessage(role, message) {
+            var chatBox = document.getElementById('chat-box');
+            var newMessage = document.createElement('div');
+            newMessage.innerHTML = '<strong>' + role + '</strong>: ' + message;
+            chatBox.appendChild(newMessage);
+
+            // Scroll to the bottom of the chat box
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
 </body>
 </html>
