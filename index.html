@@ -36,9 +36,10 @@
         <button id="send-button" onclick="sendMessage()">Gönder</button>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
-        // API anahtarınızı buraya ekleyin
         const apiKey = "AIzaSyAvDQjTto-gFHfGNw2uA_Nf8Xaf9MLr1Pg";
+        const modelEndpoint = "https://api.gemini-ai.io/v1/models/gemini-pro/chat";
 
         function sendMessage() {
             var userQuestion = document.getElementById('user-input').value;
@@ -50,20 +51,31 @@
             // Add user message to the chat box
             appendMessage('You:', userQuestion);
 
-            // Gerçek API çağrısı yapılacak yer
-            callModelAPI(userQuestion);
+            // Make API call to Gemini AI
+            callGeminiAI(userQuestion);
 
             // Clear the input field
             document.getElementById('user-input').value = '';
         }
 
-        function callModelAPI(userQuestion) {
-            // Burada gerçek bir API çağrısı yapılmalıdır
-            // API çağrısı yapmak için kullanılacak teknik, API sağlayıcınıza bağlıdır
-            // Örneğin, fetch veya axios gibi HTTP kütüphaneleri kullanılabilir
-            // Bu örnekte sadece bir simülasyon kullanılıyor
-            var modelResponse = "Yapay Zeka Cevabı: ...";  // Gerçek yanıtla değiştirin
-            appendMessage('AI:', modelResponse);
+        function callGeminiAI(userQuestion) {
+            // Gerçek bir API çağrısı yapılacak yer
+            $.ajax({
+                url: modelEndpoint,
+                type: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${apiKey}`
+                },
+                data: JSON.stringify({ "messages": [{ "role": "user", "content": userQuestion }] }),
+                success: function (response) {
+                    var modelResponse = response.messages[0].content;
+                    appendMessage('AI:', modelResponse);
+                },
+                error: function (error) {
+                    console.error("API çağrısı sırasında bir hata oluştu:", error);
+                }
+            });
         }
 
         function appendMessage(role, message) {
@@ -78,4 +90,3 @@
     </script>
 </body>
 </html>
-
