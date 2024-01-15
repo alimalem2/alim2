@@ -3,65 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yapay Zeka Sohbet Uygulaması</title>
+    <title>AI Conversation</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+        #chat-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
         }
-        #chatBox {
+        #chat-box {
             height: 300px;
             overflow-y: scroll;
-            border: 1px solid #ccc;
+            border: 1px solid #ddd;
             padding: 10px;
+            margin-bottom: 10px;
         }
-        #userInput {
-            width: 70%;
-            padding: 5px;
-            margin-right: 5px;
-        }
-        #sendButton {
-            padding: 5px;
+        #user-input {
+            width: 100%;
+            padding: 8px;
         }
     </style>
 </head>
 <body>
-    <h1>Yapay Zeka Sohbet Uygulaması</h1>
-
-    <div id="chatBox"></div>
-
-    <div>
-        <input type="text" id="userInput" placeholder="Sorunuzu girin...">
-        <button id="sendButton" onclick="sendMessage()">Gönder</button>
+    <div id="chat-container">
+        <div id="chat-box"></div>
+        <input type="text" id="user-input" placeholder="Sorunuzu girin (Çıkmak için 'q' basın)">
+        <button onclick="sendMessage()">Gönder</button>
     </div>
 
     <script>
-        function wrapText(text, width) {
-            var lines = [];
-            for (var i = 0; i < text.length; i += width) {
-                lines.push(text.slice(i, i + width));
+        function sendMessage() {
+            var userQuestion = document.getElementById('user-input').value;
+            if (userQuestion.toLowerCase() === 'q') {
+                alert('Çıkış yapılıyor...');
+                return;
             }
-            return lines.join('\n');
+
+            // Add user message to the chat box
+            appendMessage('You:', userQuestion);
+
+            // Simulate model response (replace this with actual API call if applicable)
+            var modelResponse = "Yapay Zeka Cevabı: ...";  // Replace with actual response
+            appendMessage('AI:', modelResponse);
+
+            // Clear the input field
+            document.getElementById('user-input').value = '';
         }
 
-        function sendMessage() {
-            var userInput = document.getElementById("userInput").value;
-            var chatBox = document.getElementById("chatBox");
+        function appendMessage(role, message) {
+            var chatBox = document.getElementById('chat-box');
+            var newMessage = document.createElement('div');
+            newMessage.innerHTML = '<strong>' + role + '</strong>: ' + message;
+            chatBox.appendChild(newMessage);
 
-            // Kullanıcının mesajını ekle
-            chatBox.innerHTML += "<p>Kullanıcı: " + userInput + "</p>";
-
-            // Yapay Zeka ile iletişim kurma kodu buraya eklenebilir
-            // Örnek olarak bir yapay zeka cevabı ekleyelim:
-            var modelResponse = "Yapay Zeka: Burası bir örnek cevap.";
-            chatBox.innerHTML += "<p>" + wrapText(modelResponse, 40) + "</p>";
-
-            // Kullanıcının girdiğini temizle
-            document.getElementById("userInput").value = "";
-
-            // ChatBox'u en altta tutmak için scroll yap
+            // Scroll to the bottom of the chat box
             chatBox.scrollTop = chatBox.scrollHeight;
         }
     </script>
 </body>
 </html>
+
