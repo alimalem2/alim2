@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yapay Zeka Sohbet Uygulaması</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #chatBox {
+            height: 300px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        #userInput {
+            width: 70%;
+            padding: 5px;
+            margin-right: 5px;
+        }
+        #sendButton {
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Yapay Zeka Sohbet Uygulaması</h1>
+
+    <div id="chatBox"></div>
+
+    <div>
+        <input type="text" id="userInput" placeholder="Sorunuzu girin...">
+        <button id="sendButton" onclick="sendMessage()">Gönder</button>
+    </div>
+
+    <script>
+        function wrapText(text, width) {
+            var lines = [];
+            for (var i = 0; i < text.length; i += width) {
+                lines.push(text.slice(i, i + width));
+            }
+            return lines.join('\n');
+        }
+
+        function sendMessage() {
+            var userInput = document.getElementById("userInput").value;
+            var chatBox = document.getElementById("chatBox");
+
+            // Kullanıcının mesajını ekle
+            chatBox.innerHTML += "<p>Kullanıcı: " + userInput + "</p>";
+
+            // Yapay Zeka ile iletişim kurma kodu buraya eklenebilir
+            // Örnek olarak bir yapay zeka cevabı ekleyelim:
+            var modelResponse = "Yapay Zeka: Burası bir örnek cevap.";
+            chatBox.innerHTML += "<p>" + wrapText(modelResponse, 40) + "</p>";
+
+            // Kullanıcının girdiğini temizle
+            document.getElementById("userInput").value = "";
+
+            // ChatBox'u en altta tutmak için scroll yap
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
+</body>
+</html>
