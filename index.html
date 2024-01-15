@@ -20,7 +20,11 @@
             margin-bottom: 10px;
         }
         #user-input {
-            width: 100%;
+            width: 80%;
+            padding: 8px;
+        }
+        #send-button {
+            width: 18%;
             padding: 8px;
         }
     </style>
@@ -29,10 +33,13 @@
     <div id="chat-container">
         <div id="chat-box"></div>
         <input type="text" id="user-input" placeholder="Sorunuzu girin (Çıkmak için 'q' basın)">
-        <button onclick="sendMessage()">Gönder</button>
+        <button id="send-button" onclick="sendMessage()">Gönder</button>
     </div>
 
     <script>
+        // API anahtarınızı buraya ekleyin
+        const apiKey = "AIzaSyAvDQjTto-gFHfGNw2uA_Nf8Xaf9MLr1Pg";
+
         function sendMessage() {
             var userQuestion = document.getElementById('user-input').value;
             if (userQuestion.toLowerCase() === 'q') {
@@ -43,12 +50,20 @@
             // Add user message to the chat box
             appendMessage('You:', userQuestion);
 
-            // Simulate model response (replace this with actual API call if applicable)
-            var modelResponse = "Yapay Zeka Cevabı: ...";  // Replace with actual response
-            appendMessage('AI:', modelResponse);
+            // Gerçek API çağrısı yapılacak yer
+            callModelAPI(userQuestion);
 
             // Clear the input field
             document.getElementById('user-input').value = '';
+        }
+
+        function callModelAPI(userQuestion) {
+            // Burada gerçek bir API çağrısı yapılmalıdır
+            // API çağrısı yapmak için kullanılacak teknik, API sağlayıcınıza bağlıdır
+            // Örneğin, fetch veya axios gibi HTTP kütüphaneleri kullanılabilir
+            // Bu örnekte sadece bir simülasyon kullanılıyor
+            var modelResponse = "Yapay Zeka Cevabı: ...";  // Gerçek yanıtla değiştirin
+            appendMessage('AI:', modelResponse);
         }
 
         function appendMessage(role, message) {
